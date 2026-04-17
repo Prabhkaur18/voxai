@@ -139,38 +139,37 @@ header, footer {{
     color: #ffd700 !important;
     font-weight: 800 !important;
 }}
-/* 📱 MOBILE RESPONSIVENESS */
-@media (max-width: 768px) {
+/* 📱 MOBILE FIX */
+@media (max-width: 768px) {{
 
-    .title {
+    .title {{
         font-size: 32px !important;
-    }
+    }}
 
-    .subtitle {
+    .subtitle {{
         font-size: 14px !important;
-    }
+    }}
 
-    [data-testid="stFileUploader"] {
+    [data-testid="stFileUploader"] {{
         padding: 15px !important;
-    }
+    }}
 
-    [data-testid="stFileUploader"] label {
+    [data-testid="stFileUploader"] label {{
         font-size: 16px !important;
-    }
+    }}
 
-    [data-testid="stFileUploader"] button {
+    [data-testid="stFileUploader"] button {{
         width: 100% !important;
-    }
+    }}
 
-    .box {
+    .box {{
         padding: 15px !important;
-    }
-}
+    }}
+}}
 
-/* FULL WIDTH FIX */
-.block-container {
+.block-container {{
     max-width: 100% !important;
-}
+}}
 
 </style>
 """, unsafe_allow_html=True)
