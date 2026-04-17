@@ -168,10 +168,22 @@ header, footer {{
 }}
 
 /* FULL SCREEN HEIGHT + CENTER FIX */
-html, body, .stApp {{
-    height: 100% !important;
+html, body {{
+    margin: 0 !important;
+    padding: 0 !important;
+    overflow-x: hidden;
 }}
 
+/* FORCE FULL SCREEN */
+.stApp {{
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background-size: cover !important;   /* important change */
+    background-position: center !important;
+}}
 .block-container {{
     min-height: 100vh !important;
     display: flex;
