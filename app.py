@@ -1,4 +1,8 @@
 import streamlit as st
+import os
+import openai
+
+openai.api_key = os.getenv("OPENAI_API_KEY")
 from stt import transcribe_audio
 from intent import detect_intent, generate_code_from_text
 from actions import create_file, write_code
