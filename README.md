@@ -10,7 +10,7 @@ A voice-controlled AI agent that transcribes speech, detects intent, and execute
 [Watch on YouTube](#) ← replace with your YouTube link
 
 ## 📄 Technical Article
-(https://medium.com/@prabhkaur1811/how-i-built-a-voice-controlled-ai-agent-that-listens-thinks-and-acts-5986aeb676ee) ← replace with your article link
+(https://medium.com/@prabhkaur1811/how-i-built-a-voice-controlled-ai-agent-that-listens-thinks-and-acts-5986aeb676ee) ← article link
 
 ---
 
