@@ -1,13 +1,14 @@
 import streamlit as st
 import os
-import openai
 
-openai.api_key = os.getenv("OPENAI_API_KEY")
 from stt import transcribe_audio
-from intent import detect_intent, generate_code_from_text
-from actions import create_file, write_code
-import os
+from intent import detect_intent
+from tools import execute_action
+
 import base64
+from dotenv import load_dotenv
+load_dotenv()
+
 
 # ---------- LOAD BACKGROUND ----------
 def get_base64(file):
@@ -206,7 +207,17 @@ st.markdown('<div class="subtitle">Voice → Intelligence → Action</div>', uns
 
 st.divider()
 
-uploaded_file = st.file_uploader("🎧 DROP YOUR AUDIO HERE", type=["wav", "mp3", "mp4"])
+tab1, tab2 = st.tabs(["📁 Upload Audio", "🎤 Record Microphone"])
+
+uploaded_file = None
+
+with tab1:
+    uploaded_file = st.file_uploader("🎧 DROP YOUR AUDIO HERE", type=["wav", "mp3", "mp4"])
+
+with tab2:
+    mic_file = st.audio_input("Click to record")
+    if mic_file:
+        uploaded_file = mic_file
 
 if uploaded_file is not None:
 
@@ -225,26 +236,25 @@ if uploaded_file is not None:
     with col2:
         st.markdown('<div class="section">🧠 Detected Intent</div>', unsafe_allow_html=True)
         intent = detect_intent(text)
-        st.markdown(f'<div class="box">{intent}</div>', unsafe_allow_html=True)
+        st.markdown(f'<div class="box">{intent.get("intent", "unknown")}</div>', unsafe_allow_html=True)
 
     st.divider()
 
     st.markdown('<div class="section">⚙️ Action Execution</div>', unsafe_allow_html=True)
 
-    if intent == "create_file":
-        result = create_file("ai_file.txt")
-        st.success(result)
+    intent_result = intent
+    action_result = execute_action(intent_result, text)
 
-    elif intent == "write_code":
-        code = generate_code_from_text(text)
-        result = write_code("ai_generated.py", code)
-
-        col3, col4 = st.columns(2)
-
-        with col3:
-            st.markdown('<div class="section">💻 Generated Code</div>', unsafe_allow_html=True)
-            st.code(code, language="python")
-
-        with col4:
-            st.markdown('<div class="section">✅ Result</div>', unsafe_allow_html=True)
-            st.success(result)
+    col3, col4 = st.columns(2)
+    with col3:
+        st.markdown('<div class="section">💻 Output</div>', unsafe_allow_html=True)
+        if action_result.get("output"):
+            st.code(action_result["output"], language=action_result.get("language", "text"))
+    with col4:
+        st.markdown('<div class="section">✅ Result</div>', unsafe_allow_html=True)
+        if action_result["success"]:
+            st.success(action_result["message"])
+            if action_result.get("file_path"):
+                st.info(f"📁 Saved to: {action_result['file_path']}")
+        else:
+            st.error(action_result["message"])

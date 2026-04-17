@@ -1,0 +1,8 @@
+"""\nCreate a Python file with Hello World code.\n"""
+
+def main():
+    # TODO: implement
+    print("Hello from voice agent!")
+
+if __name__ == "__main__":
+    main()
