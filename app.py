@@ -168,9 +168,9 @@ header, footer {{
 }}
 
 /* FULL SCREEN HEIGHT + CENTER FIX */
-html, body, .stApp {
+html, body, .stApp {{
     height: 100% !important;
-}
+}}
 
 .block-container {{
     min-height: 100vh !important;
@@ -179,7 +179,7 @@ html, body, .stApp {
     justify-content: center;   /* vertical center */
     align-items: center;       /* horizontal center */
 }}
-}}
+
 
 </style>
 """, unsafe_allow_html=True)
