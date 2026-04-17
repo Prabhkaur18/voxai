@@ -167,8 +167,18 @@ header, footer {{
     }}
 }}
 
+/* FULL SCREEN HEIGHT + CENTER FIX */
+html, body, .stApp {
+    height: 100% !important;
+}
+
 .block-container {{
-    max-width: 100% !important;
+    min-height: 100vh !important;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;   /* vertical center */
+    align-items: center;       /* horizontal center */
+}}
 }}
 
 </style>
