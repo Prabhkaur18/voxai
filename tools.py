@@ -19,11 +19,40 @@ OUTPUT_DIR.mkdir(exist_ok=True)
 def execute_action(intent_result: dict, transcription: str) -> dict:
     """
     Route to the correct tool based on intent.
-    Returns a result dict with: success, action, message, output, file_path, language
+    Supports multitask — executes ALL detected intents.
     """
-    intent = intent_result.get("intent", "general_chat")
+    intents = intent_result.get("intents", [intent_result.get("intent", "general_chat")])
     details = intent_result.get("details", {})
 
+    # Single intent
+    if len(intents) == 1:
+        return _route(intents[0], details, transcription)
+
+    # Multitask — run all intents and combine results
+    results = []
+    for intent in intents:
+        result = _route(intent, details, transcription)
+        results.append(result)
+
+    # Combine all results into one
+    combined_output = "\n\n---\n\n".join(
+        [r["output"] for r in results if r.get("output")]
+    )
+    combined_message = "\n".join([r["message"] for r in results])
+    combined_files = [r["file_path"] for r in results if r.get("file_path")]
+
+    return {
+        "success": all(r["success"] for r in results),
+        "action": " + ".join([r["action"] for r in results]),
+        "message": combined_message,
+        "output": combined_output,
+        "file_path": ", ".join(combined_files) if combined_files else None,
+        "language": results[0].get("language", "text"),
+    }
+
+
+def _route(intent: str, details: dict, transcription: str) -> dict:
+    """Route a single intent to its handler."""
     if intent == "write_code":
         return _handle_write_code(details, transcription)
     elif intent == "create_file":

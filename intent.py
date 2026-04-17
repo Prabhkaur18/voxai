@@ -14,7 +14,8 @@ INTENT_SYSTEM_PROMPT = """You are an intent classifier for a voice-controlled fi
 
 Analyze the user's transcribed speech and return a JSON object with:
 {
-  "intent": "<one of: create_file, write_code, summarize, general_chat>",
+  "intent": "<primary intent: create_file, write_code, summarize, general_chat>",
+  "intents": ["<list of ALL intents detected, e.g. write_code and create_file together>"],
   "details": {
     "filename": "<suggested filename if applicable, else null>",
     "language": "<programming language if write_code, else null>",
@@ -24,15 +25,16 @@ Analyze the user's transcribed speech and return a JSON object with:
 }
 
 Intent definitions:
-- create_file: User wants to create a new file or folder (text, markdown, config, etc.)
+- create_file: User wants to create a new file or folder
 - write_code: User wants code written and saved to a file
 - summarize: User wants text/content summarized
-- general_chat: Anything else — questions, conversation, help
+- general_chat: Anything else
 
 Rules:
 - Return ONLY valid JSON. No explanation, no markdown fences.
-- If the user says "create a python file" → intent is write_code, language is python
-- If the user says "make a file called notes.txt" → intent is create_file
+- If user says "create a python file with hello world" → intents: ["write_code", "create_file"]
+- If user says "create a file called notes.txt" → intents: ["create_file"]
+- Always populate the intents list with ALL detected intents
 - Always populate the details object even with nulls
 """
 
@@ -116,10 +118,11 @@ def _rule_based_fallback(transcription: str) -> dict:
     text = transcription.lower()
 
     code_keywords = ["code", "function", "script", "program", "write a", "implement", "class", "def ", "python", "javascript", "java ", "c++"]
-    file_keywords = ["create a file", "make a file", "new file", "create folder", "make folder", "touch "]
+    file_keywords = ["create a file", "make a file", "new file", "create folder", "make folder"]
     summarize_keywords = ["summarize", "summary", "tldr", "brief", "overview", "condense"]
 
-    # Detect language
+    detected_intents = []
+
     language = None
     for lang in ["python", "javascript", "typescript", "java", "c++", "go", "rust", "ruby", "php", "bash"]:
         if lang in text:
@@ -127,42 +130,22 @@ def _rule_based_fallback(transcription: str) -> dict:
             break
 
     if any(k in text for k in code_keywords):
-        return {
-            "intent": "write_code",
-            "details": {
-                "filename": f"output.{language or 'py'}",
-                "language": language or "python",
-                "description": transcription,
-                "content_hint": transcription,
-            },
-        }
-    elif any(k in text for k in file_keywords):
-        return {
-            "intent": "create_file",
-            "details": {
-                "filename": "new_file.txt",
-                "language": None,
-                "description": transcription,
-                "content_hint": None,
-            },
-        }
-    elif any(k in text for k in summarize_keywords):
-        return {
-            "intent": "summarize",
-            "details": {
-                "filename": None,
-                "language": None,
-                "description": transcription,
-                "content_hint": transcription,
-            },
-        }
-    else:
-        return {
-            "intent": "general_chat",
-            "details": {
-                "filename": None,
-                "language": None,
-                "description": transcription,
-                "content_hint": None,
-            },
-        }
+        detected_intents.append("write_code")
+    if any(k in text for k in file_keywords):
+        detected_intents.append("create_file")
+    if any(k in text for k in summarize_keywords):
+        detected_intents.append("summarize")
+
+    if not detected_intents:
+        detected_intents = ["general_chat"]
+
+    return {
+        "intent": detected_intents[0],
+        "intents": detected_intents,
+        "details": {
+            "filename": f"output.{language or 'py'}" if "write_code" in detected_intents else "new_file.txt",
+            "language": language,
+            "description": transcription,
+            "content_hint": transcription,
+        },
+    }

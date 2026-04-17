@@ -1,0 +1,7 @@
+SUMMARY
+========================================
+Social engineering, combined with Artificial Intelligence (AI), poses a significant threat to individuals and organizations. AI-powered tools can be used to create sophisticated phishing emails, fake voices, and other types of deceptive content that can trick people into revealing sensitive information. Additionally, AI-driven chatbots can be used to simulate human-like conversations, making it easier for attackers to manipulate victims. As a result, it's essential to be vigilant and implement robust security measures to protect against these types of attacks. By understanding the dangers of AI-driven social engineering, individuals and organizations can take steps to mitigate the risks and stay safe online.
+
+ORIGINAL
+========================================
+social engineering and AI

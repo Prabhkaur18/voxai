@@ -46,6 +46,11 @@ header, footer {{
     background-repeat: no-repeat;
     background-attachment: scroll;
     animation: galaxyMove 60s linear infinite;
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
 }}
 
 /* 🌌 ANIMATION */
@@ -144,6 +149,7 @@ header, footer {{
     color: #ffd700 !important;
     font-weight: 800 !important;
 }}
+
 /* 📱 MOBILE FIX */
 @media (max-width: 768px) {{
 
@@ -179,22 +185,12 @@ html, body {{
     overflow-x: hidden;
 }}
 
-/* FORCE FULL SCREEN */
-.stApp {{
-    position: fixed;
-    top: 0;
-    left: 0;
-    width: 100%;
-    height: 100%;
-    background-size: cover !important;   /* important change */
-    background-position: center !important;
-}}
 .block-container {{
     min-height: 100vh !important;
     display: flex;
     flex-direction: column;
-    justify-content: center;   /* vertical center */
-    align-items: center;       /* horizontal center */
+    justify-content: center;
+    align-items: center;
 }}
 
 
