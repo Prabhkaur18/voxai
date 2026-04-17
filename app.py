@@ -41,10 +41,10 @@ header, footer {{
 /* 🌌 BACKGROUND (MOVING FIXED) */
 .stApp {{
     background: url("data:image/png;base64,{img}");
-    background-size: 120%;
-    background-position: 0% 0%;
+    background-size: cover;
+    background-position: center center;
     background-repeat: no-repeat;
-    background-attachment: scroll;
+    background-attachment: fixed;
     animation: galaxyMove 60s linear infinite;
     position: fixed;
     top: 0;
