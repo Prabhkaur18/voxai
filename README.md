@@ -7,7 +7,7 @@ A voice-controlled AI agent that transcribes speech, detects intent, and execute
 ---
 
 ## 🎥 Demo Video
------- ←  YouTube link
+https://youtu.be/apt9DX5mSoo?si=rwHeNUOIpiQ3VhYS ←  YouTube link
 
 ## 📄 Technical Article
 (https://medium.com/@prabhkaur1811/how-i-built-a-voice-controlled-ai-agent-that-listens-thinks-and-acts-5986aeb676ee) ← article link
